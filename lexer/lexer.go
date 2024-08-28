@@ -90,7 +90,7 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.RBRACE, l.chr)
 	case 0: // NUL-byte / End-of-file
 		tok.Literal = ""
-		tok = newToken(token.EOF, l.chr)
+		tok.Type = token.EOF
 
 	default:
 		if isLetter(l.chr) {
