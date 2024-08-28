@@ -35,6 +35,15 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[position:l.position]
 }
 
+func (l *Lexer) readNumber() string {
+	position := l.position
+	for isDigit(l.chr) {
+		l.readChar()
+	}
+
+	return l.input[position:l.position]
+}
+
 func (l *Lexer) skipWhitespace() {
 	// I know what it doing, but I don't really understand how it works.
 	// This is mainly because of the Go syntax.
@@ -51,6 +60,10 @@ func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 	// I kinda like this syntax, but I wish it was possible to split it over multiple lines,
 	// alternatively how it's done in Python (Go + Python pseudocode) with `'a' <= ch <= 'z'`
+}
+
+func isDigit(ch byte) bool {
+	return '0' <= ch && ch <= '9'
 }
 
 func (l *Lexer) NextToken() token.Token {
@@ -83,6 +96,10 @@ func (l *Lexer) NextToken() token.Token {
 		if isLetter(l.chr) {
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
+			return tok
+		} else if isDigit(l.chr) {
+			tok.Type = token.INT
+			tok.Literal = l.readNumber()
 			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, l.chr)
