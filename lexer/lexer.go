@@ -36,7 +36,7 @@ func (l *Lexer) readIdentifier() string {
 }
 
 func isLetter(ch byte) bool {
-    return 'a' <= ch && ch <= 'Z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+    return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
     // I kinda like this syntax, but I wish it was possible to split it over multiple lines,
     // alternatively how it's done in Python (Go + Python pseudocode) with `'a' <= ch <= 'z'`
 }
