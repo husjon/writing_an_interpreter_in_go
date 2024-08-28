@@ -35,6 +35,18 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[position:l.position]
 }
 
+func (l *Lexer) skipWhitespace() {
+	// I know what it doing, but I don't really understand how it works.
+	// This is mainly because of the Go syntax.
+	// My assumption is that since `l.chr` already contains a byte,
+	//  the first time the for loop goes through, the conditional is met and l.readChar is called.
+	// Since it was met, it can loop again until it is no longer met and finally breaks out.
+
+	for l.chr == ' ' || l.chr == '\t' || l.chr == '\n' || l.chr == '\r' {
+		l.readChar()
+	}
+}
+
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 	// I kinda like this syntax, but I wish it was possible to split it over multiple lines,
@@ -43,6 +55,8 @@ func isLetter(ch byte) bool {
 
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
+
+	l.skipWhitespace()
 
 	switch l.chr {
 	case '=':
