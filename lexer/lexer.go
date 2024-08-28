@@ -28,17 +28,17 @@ func (l *Lexer) readChar() {
 }
 
 func (l *Lexer) readIdentifier() string {
-    position := l.position
-    for isLetter(l.chr) {
-        l.readChar()
-    }
-    return l.input[position:l.position]
+	position := l.position
+	for isLetter(l.chr) {
+		l.readChar()
+	}
+	return l.input[position:l.position]
 }
 
 func isLetter(ch byte) bool {
-    return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
-    // I kinda like this syntax, but I wish it was possible to split it over multiple lines,
-    // alternatively how it's done in Python (Go + Python pseudocode) with `'a' <= ch <= 'z'`
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+	// I kinda like this syntax, but I wish it was possible to split it over multiple lines,
+	// alternatively how it's done in Python (Go + Python pseudocode) with `'a' <= ch <= 'z'`
 }
 
 func (l *Lexer) NextToken() token.Token {
@@ -65,14 +65,14 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = ""
 		tok = newToken(token.EOF, l.chr)
 
-    default:
-        if isLetter(l.chr) {
-            tok.Literal = l.readIdentifier()
-            tok.Type = token.LookupIdent(tok.Literal)
-            return tok
-        } else {
-            tok = newToken(token.ILLEGAL, l.chr)
-        }
+	default:
+		if isLetter(l.chr) {
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
+			return tok
+		} else {
+			tok = newToken(token.ILLEGAL, l.chr)
+		}
 	}
 
 	l.readChar()
