@@ -27,6 +27,20 @@ func (l *Lexer) readChar() {
 	l.readPosition += 1
 }
 
+func (l *Lexer) readIdentifier() string {
+    position := l.position
+    for isLetter(l.chr) {
+        l.readChar()
+    }
+    return l.input[position:l.position]
+}
+
+func isLetter(ch byte) bool {
+    return 'a' <= ch && ch <= 'Z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+    // I kinda like this syntax, but I wish it was possible to split it over multiple lines,
+    // alternatively how it's done in Python (Go + Python pseudocode) with `'a' <= ch <= 'z'`
+}
+
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
@@ -50,6 +64,14 @@ func (l *Lexer) NextToken() token.Token {
 	case 0: // NUL-byte / End-of-file
 		tok.Literal = ""
 		tok = newToken(token.EOF, l.chr)
+
+    default:
+        if isLetter(l.chr) {
+            tok.Literal = l.readIdentifier()
+            return tok
+        } else {
+            tok = newToken(token.ILLEGAL, l.chr)
+        }
 	}
 
 	l.readChar()
