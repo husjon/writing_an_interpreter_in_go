@@ -27,6 +27,16 @@ func (l *Lexer) readChar() {
 	l.readPosition += 1
 }
 
+func (l *Lexer) peekChar() byte {
+	// Reads a single character from the input _without_ incrementing the pointer
+	if l.readPosition >= len(l.input) {
+		// Reset the current character if we've read past the input (aka end of file)
+		return 0 // Since this is a byte, this is a NUL-byte
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
 func (l *Lexer) readIdentifier() string {
 	position := l.position
 	for isLetter(l.chr) {
