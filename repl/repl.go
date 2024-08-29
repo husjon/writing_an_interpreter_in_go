@@ -26,7 +26,7 @@ func Start(in io.Reader, out io.Writer) {
 		line := scanner.Text() // Gets the text as a string
 		l := lexer.New(line)
 
-		// Iterates over the input and prints out the provided tokens that was parsed until EOF.
+		// Iterates over the input and prints out the provided tokens until it hits EOF (aka end of line).
 		for tok := l.NextToken(); tok.Type != token.EOF; tok = l.NextToken() {
 			fmt.Fprintf(out, "%+v\n", tok)
 		}
